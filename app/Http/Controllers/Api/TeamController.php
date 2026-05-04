@@ -19,7 +19,9 @@ class TeamController extends Controller
                 'bio' => $m->bio,
                 'credentials' => $m->credentials,
                 'image_url' => $m->image
-                    ? rtrim(config('app.url'), '/').'/storage/'.$m->image
+                    ? (preg_match('#^https?://#i', $m->image)
+                        ? $m->image
+                        : rtrim(config('app.url'), '/').'/storage/'.$m->image)
                     : null,
                 'sort_order' => $m->sort_order,
             ]);
