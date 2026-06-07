@@ -56,7 +56,10 @@ return [
             'prefix' => '',
             'prefix_indexes' => true,
             'strict' => true,
-            'engine' => null,
+            // Force InnoDB: the local MySQL server defaults to MyISAM, which ignores
+            // foreign keys and caps index keys at 1000 bytes. This feature relies on
+            // FK integrity (patients, payments, consultations, messages, results).
+            'engine' => 'InnoDB',
             'options' => extension_loaded('pdo_mysql') ? array_filter([
                 PDO::MYSQL_ATTR_SSL_CA => env('MYSQL_ATTR_SSL_CA'),
             ]) : [],
