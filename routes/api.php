@@ -18,4 +18,5 @@ Route::post('/patient/login', [PatientAuthController::class, 'login']);
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/patient/logout', [PatientAuthController::class, 'logout']);
     Route::get('/patient/me', [PatientAuthController::class, 'me']);
+    Route::post('/patient/payment', [\App\Http\Controllers\Api\PatientPaymentController::class, 'store']);
 });
