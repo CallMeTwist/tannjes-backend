@@ -33,5 +33,32 @@ class TeamMemberSeeder extends Seeder
                 [...$m, 'sort_order' => $i + 1, 'is_active' => true],
             );
         }
+
+        // Map seeded doctors to departments by a keyword in their role.
+        $map = [
+            'General Medicine'              => ['General Medicine', 'Internal Medicine', 'Family Physician'],
+            'Paediatrics'                  => ['Paediatrics'],
+            'Nephrology'                   => ['Cardiology'], // closest available department
+            'Obstetrics & Gynaecology'     => ['Obstetrics'],
+            'Dermatology'                  => ['Dermatology'],
+            'Neurology'                    => ['Neurology'],
+            'Mental Health & Counselling'  => ['Psychiatry'],
+            'General Surgery'              => ['Orthopaedics'],
+            'Pharmacy'                     => ['Pharmacist'],
+        ];
+
+        foreach (\App\Models\Department::all() as $dept) {
+            $keywords = $map[$dept->name] ?? [];
+            if (empty($keywords)) {
+                continue;
+            }
+            \App\Models\TeamMember::query()
+                ->where(function ($q) use ($keywords) {
+                    foreach ($keywords as $kw) {
+                        $q->orWhere('role', 'like', "%{$kw}%");
+                    }
+                })
+                ->update(['department_id' => $dept->id, 'is_consultant' => true]);
+        }
     }
 }

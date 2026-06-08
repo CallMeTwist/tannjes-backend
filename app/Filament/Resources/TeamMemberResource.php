@@ -23,6 +23,12 @@ class TeamMemberResource extends Resource
             Forms\Components\TextInput::make('role')->required()->maxLength(255),
             Forms\Components\Textarea::make('bio')->required()->rows(4),
             Forms\Components\TextInput::make('credentials')->maxLength(255),
+            Forms\Components\Select::make('department_id')
+                ->relationship('department', 'name')
+                ->searchable()->preload()->label('Department'),
+            Forms\Components\Toggle::make('is_consultant')
+                ->helperText('Show this person as a consultant on the department page.')
+                ->default(false),
             Forms\Components\FileUpload::make('image')
                 ->image()
                 ->directory('team')
@@ -42,6 +48,7 @@ class TeamMemberResource extends Resource
                 Tables\Columns\ImageColumn::make('image')->disk('public')->circular(),
                 Tables\Columns\TextColumn::make('name')->searchable(),
                 Tables\Columns\TextColumn::make('role')->searchable(),
+                Tables\Columns\TextColumn::make('department.name')->label('Department')->sortable(),
                 Tables\Columns\ToggleColumn::make('is_active'),
             ])
             ->actions([
