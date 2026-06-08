@@ -27,4 +27,5 @@ Route::middleware(['auth:sanctum', 'patient.approved'])->group(function () {
     Route::get('/patient/consultations', [ConsultationController::class, 'index']);
     Route::get('/patient/consultations/{consultation}/messages', [ConsultationController::class, 'messages']);
     Route::post('/patient/consultations/{consultation}/messages', [ConsultationController::class, 'store']);
+    Route::get('/patient/results', [\App\Http\Controllers\Api\TestResultController::class, 'index']);
 });
