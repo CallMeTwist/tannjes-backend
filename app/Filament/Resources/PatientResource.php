@@ -52,8 +52,7 @@ class PatientResource extends Resource
                     ->requiresConfirmation()
                     ->visible(fn (Patient $r) => $r->status === Patient::STATUS_PENDING_APPROVAL)
                     ->action(function (Patient $r) {
-                        $r->update(['status' => Patient::STATUS_APPROVED, 'approved_at' => now()]);
-                        // Phase 3 Task 3.3 extends this to also create a consultation.
+                        \App\Services\PatientApproval::approve($r, auth()->id());
                     }),
                 Tables\Actions\Action::make('reject')
                     ->label('Reject')
