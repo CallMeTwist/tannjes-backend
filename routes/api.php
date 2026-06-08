@@ -9,3 +9,13 @@ Route::get('/team', [TeamController::class, 'index']);
 Route::get('/settings', [SettingsController::class, 'index']);
 Route::get('/departments', [DepartmentController::class, 'index']);
 Route::get('/departments/{slug}', [DepartmentController::class, 'show']);
+
+use App\Http\Controllers\Api\PatientAuthController;
+
+Route::post('/patient/register', [PatientAuthController::class, 'register']);
+Route::post('/patient/login', [PatientAuthController::class, 'login']);
+
+Route::middleware('auth:sanctum')->group(function () {
+    Route::post('/patient/logout', [PatientAuthController::class, 'logout']);
+    Route::get('/patient/me', [PatientAuthController::class, 'me']);
+});
